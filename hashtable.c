@@ -41,27 +41,26 @@ static int findNextPrime(int x)
 	return x;
 }
 // Polynomial rolling hash function
-static int hash(const char* key, int prime, int size)
+static int hash(const void* key, int prime, int size)
 {
 	ItemData *data_key = (ItemData *)key;
+	char *str_key = (char *)key;
 
 	// const int n = strlen(key);
 	int n = data_key->item_size;
 	int hash = 0;
 	for (int i = 0; i < n; i++)
 	{
-		int key_ = key[i];
+		if ((int)str_key[i] < 0) continue;
 
-		if (key_ < 0) continue;
-
-		hash += ((unsigned)pow(prime, i) % size) * (key[i] % size);
+		hash += ((unsigned)pow(prime, i) % size) * (str_key[i] % size);
 		hash %= size;
 	}
 
 	return hash;
 }
 // Open addressing, we will use double hashing
-static int doubleHash(const char* key, int size, int attempt)
+static int doubleHash(const void* key, int size, int attempt)
 {
 	// We're hashing ASCII strings, which has an alphabet size of 128 
 	// We should choose a prime larger than that 151, 163 should do
@@ -73,7 +72,7 @@ static int doubleHash(const char* key, int size, int attempt)
 
 	return finalHash;
 }
-static Item* allocItem(const char* key, const char* value)
+static Item* allocItem(const void* key, const void* value)
 {
 	Item* item = malloc(sizeof(Item));
 	if (NULL == item)
@@ -87,11 +86,11 @@ static Item* allocItem(const char* key, const char* value)
 
 	ItemData *data_key = (ItemData *)key, *data_value = (ItemData *)value;
 
-	// item->key = (char *)calloc(data_key->item_size, sizeof(char));
-	// item->value = (char *)calloc(data_value->item_size, sizeof(char));
+	// item->key = (void *)calloc(data_key->item_size, sizeof(void));
+	// item->value = (void *)calloc(data_value->item_size, sizeof(void));
 
-	item->key = (char *)malloc(data_key->item_size);
-	item->value = (char *)malloc(data_value->item_size);
+	item->key = (void *)malloc(data_key->item_size);
+	item->value = (void *)malloc(data_value->item_size);
 
 	item->type_key = data_key->type;
 	item->type_value = data_value->type;
@@ -126,7 +125,7 @@ static Table* allocTable(int size)
 
 	return table;
 }
-static Item** search(Table* table, const char* key, bool findInsertLocation)
+static Item** search(Table* table, const void* key, bool findInsertLocation)
 {
 	int attempt = 0;
 	// Search until we find the key matching or we find an empty slot
@@ -160,8 +159,8 @@ static Item** search(Table* table, const char* key, bool findInsertLocation)
 			continue;
 		}
 		
-		ItemData *data_key = key;
-		if (0 == strncmp(key, item->key, data_key->item_size))
+		const ItemData *data_key = key;
+		if (0 == strncmp((char *)key, (char *)item->key, data_key->item_size))
 		{
 			if (findInsertLocation)
 			{
@@ -237,7 +236,7 @@ void FreeTable(Table* table)
 	free(table->items);
 	free(table);
 }
-void Insert(Table* table, const char* key, const char* value)
+void Insert(Table* table, const void* key, const void* value)
 {
 	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
 	if (70 < table->count * 100 / table->size)
@@ -252,7 +251,7 @@ void Insert(Table* table, const char* key, const char* value)
 	// Increase the count of items in the table
 	table->count++;
 }
-void Delete(Table* table, const char* key)
+void Delete(Table* table, const void* key)
 {
 	Item** itemLocation = search(table, key, false);
 	Item*  item = *itemLocation;
@@ -276,8 +275,8 @@ void Delete(Table* table, const char* key)
 	}
 }
 
-// char* Search(Table* table, const char* key)
-Item *Search(Table* table, const char* key)
+// void* Search(Table* table, const void* key)
+Item *Search(Table* table, const void* key)
 {
 	// Search for the item with the given key
 	Item** itemLocation = search(table, key, false);

@@ -9,8 +9,8 @@ typedef struct tagItemData {
 
 typedef struct
 {
-	char* key;
-	char* value;
+	void* key;
+	void* value;
     int type_key, type_value;
 }
 Item;

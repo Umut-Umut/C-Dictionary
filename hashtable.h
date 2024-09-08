@@ -13,9 +13,9 @@ typedef struct
 Table;
 
 
-void Insert(Table* table, const char* key, const char* value);
-void Delete(Table* table, const char* key);
-Item *Search(Table* table, const char* key);
-char* ock_Search(Table* table, const char* key);
+void Insert(Table* table, const void* key, const void* value);
+void Delete(Table* table, const void* key);
+Item *Search(Table* table, const void* key);
+void* ock_Search(Table* table, const void* key);
 Table* AllocTable();
 void FreeTable(Table* table);
