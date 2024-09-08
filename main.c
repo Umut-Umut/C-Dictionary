@@ -6,19 +6,6 @@
 #include "MyTypes.h"
 
 
-// Harici fonksiyon denemesi
-// void funk(Table *table)
-// {
-// 	String str_key = {{STRING, sizeof(String)}, "Merhaba"};
-// 	String str_value = {{STRING, sizeof(String)}, "Dunya"};
-
-// 	Integer int_key = {{INT, sizeof(String)}, 7};
-// 	String str_value2 = {{STRING, sizeof(String)}, "Tam Sayi"};
-
-// 	Insert(table, &str_key, &str_value);
-// 	Insert(table, &int_key, &str_value2);
-// }
-
 
 void al_bu_itemi_kullan(Item *item);
 
@@ -27,22 +14,46 @@ int main(int argc, char **argv)
 {
 	Table *table = AllocTable();
 
-	String str_key = {data_str, "Merhaba"},
-	str_value = {data_str, "Dunya"},
-	str_umut = {data_str, "Umut"};
-	
-	
-	Insert(table, &str_key, &str_value);
 
-	Item *item = Search(table, &str_key);
-	
-	al_bu_itemi_kullan(item);
+	char keys[10][20] = {
+		"Gokkusagi", "Kitap", "Kumsal", "Damlacik", "Papatya", "Zaman", "Bulut", "Deniz", "Ruzgar", "Yagmur"
+	};
+	char values[10][20] = {
+		"Ayna", "Yildiz", "Kahve", "Kalem", "Nehir", "Yokus", "Cicek", "Marti", "Masal", "Huzur"
+	};
 
-	Insert(table, &str_key, &str_umut);
+	ItemData item_str = {STRING, sizeof(String)};
 
-	item = Search(table, &str_key);
+	// Insert
+	for (int i = 0; i < 10; i++)
+	{
+		String str_key = {item_str, keys[i]}; 
+		String str_val = {item_str, values[i]};
 
-	al_bu_itemi_kullan(item);
+		Insert(table, &str_key, &str_val);
+	}
+	printf("table count : %d\n", table->count);
+
+	// Print
+	for (int i = 0; i < 10; i++)
+	{
+		String str_key = {item_str, keys[i]};
+
+		Item *item = Search(table, &str_key);
+		if (NULL == item)
+		{
+
+		}
+		else
+		{
+			if (item->type_key == STRING && item->type_value == STRING)
+			{
+				String *strp_key = (String *)item->key;
+				String *strp_val = (String *)item->value;
+				printf("%s : %s\n", strp_key->text, strp_val->text);
+			}
+		}
+	}
 
 
 	FreeTable(table);

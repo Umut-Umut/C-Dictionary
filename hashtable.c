@@ -51,7 +51,7 @@ static int hash(const void* key, int prime, int size)
 	int hash = 0;
 	for (int i = 0; i < n; i++)
 	{
-		if ((int)str_key[i] < 0) continue;
+		if (str_key[i] < 0) continue;
 
 		hash += ((unsigned)pow(prime, i) % size) * (str_key[i] % size);
 		hash %= size;
@@ -160,7 +160,8 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		}
 		
 		const ItemData *data_key = key;
-		if (0 == strncmp((char *)key, (char *)item->key, data_key->item_size))
+		// if (0 == strncmp((char *)key, (char *)(item->key), data_key->item_size))
+		if (0 == memcmp(key, item->key, data_key->item_size))
 		{
 			if (findInsertLocation)
 			{
@@ -168,6 +169,7 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 			}
 			return itemLocation;
 		}
+
 		// if (0 == strcmp(key, item->key))
 		// {
 		// 	return itemLocation;

@@ -41,7 +41,7 @@ typedef struct tagString64 {
 } String64;
 
 
-ItemData data_str = {STRING, sizeof(String)};
+// ItemData data_str = {STRING, sizeof(String)};
 
 
 #endif
