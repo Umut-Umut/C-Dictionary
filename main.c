@@ -6,10 +6,6 @@
 #include "MyTypes.h"
 
 
-
-void al_bu_itemi_kullan(Item *item);
-
-
 int main(int argc, char **argv)
 {
 	Table *table = AllocTable();
