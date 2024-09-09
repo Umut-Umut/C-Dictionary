@@ -110,6 +110,21 @@ static void freeItem(Item* item)
 	free(item->value);
 	free(item);
 }
+static void delete(Table *table, Item **itemLocation)
+{
+	Item *item = *itemLocation;
+	// If search returned an empty slot location, we do nothing, this item doesn't exist in table already
+	if (NULL == item)
+	{
+		return;
+	}
+
+	// item aldıktan sonra deleted olarak işaretliyor.
+	freeItem(item);
+	*itemLocation = DELETED;
+
+	table->count--;	
+}
 static Table* allocTable(int size)
 {
 	Table* table = malloc(sizeof(Table));
@@ -165,7 +180,8 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		{
 			if (findInsertLocation)
 			{
-				freeItem(item);	
+				// freeItem(item);
+				delete(table, itemLocation);
 			}
 			return itemLocation;
 		}
@@ -256,19 +272,20 @@ void Insert(Table* table, const void* key, const void* value)
 void Delete(Table* table, const void* key)
 {
 	Item** itemLocation = search(table, key, false);
-	Item*  item = *itemLocation;
+	// Item*  item = *itemLocation;
 
-	// If search returned an empty slot location, we do nothing, this item doesn't exist in table already
-	if (NULL == item)
-	{
-		return;
-	}
+	// // If search returned an empty slot location, we do nothing, this item doesn't exist in table already
+	// if (NULL == item)
+	// {
+	// 	return;
+	// }
 
-	// item aldıktan sonra deleted olarak işaretliyor.
-	freeItem(item);
-	*itemLocation = DELETED;
+	// // item aldıktan sonra deleted olarak işaretliyor.
+	// freeItem(item);
+	// *itemLocation = DELETED;
 
-	table->count--;
+	// table->count--;
+	delete(table, itemLocation);
 
 	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
 	if (10 > table->count * 100 / table->size)

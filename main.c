@@ -15,6 +15,19 @@ int main(int argc, char **argv)
 	Table *table = AllocTable();
 
 
+
+
+
+	FreeTable(table);
+	
+
+	return 0;
+}
+
+
+
+// TESTS
+/* STRING TEST
 	char keys[10][20] = {
 		"Gokkusagi", "Kitap", "Kumsal", "Damlacik", "Papatya", "Zaman", "Bulut", "Deniz", "Ruzgar", "Yagmur"
 	};
@@ -23,6 +36,7 @@ int main(int argc, char **argv)
 	};
 
 	ItemData item_str = {STRING, sizeof(String)};
+	
 
 	// Insert
 	for (int i = 0; i < 10; i++)
@@ -54,38 +68,32 @@ int main(int argc, char **argv)
 			}
 		}
 	}
+*/
 
 
-	FreeTable(table);
-	
+// void al_bu_itemi_kullan(Item *item)
+// {
+// 	if (item == NULL)
+// 	{
+// 		printf("bu nasil bi keydir listede yoktur.\n");		
+// 	}
+// 	else if (item->type_key == STRING)
+// 	{
+// 		printf("Bu key bir string\n");
+// 		String *key = item->key;
+// 		String *value = item->value;
 
-	return 0;
-}
-
-
-void al_bu_itemi_kullan(Item *item)
-{
-	if (item == NULL)
-	{
-		printf("bu nasil bi keydir listede yoktur.\n");		
-	}
-	else if (item->type_key == STRING)
-	{
-		printf("Bu key bir string\n");
-		String *key = item->key;
-		String *value = item->value;
-
-		printf("key : %s\n", key->text);
-		printf("value : %s\n", value->text);
-	}
-	else if (item->type_key == INT)
-	{
-		printf("Bu key bir integeyr\n");
-	}
-	else
-	{
-	}
-}
+// 		printf("key : %s\n", key->text);
+// 		printf("value : %s\n", value->text);
+// 	}
+// 	else if (item->type_key == INT)
+// 	{
+// 		printf("Bu key bir integeyr\n");
+// 	}
+// 	else
+// 	{
+// 	}
+// }
 
 // enum {INT, FLOAT, STRING, STRING64, CHAR, BOOLEAN};
 
