@@ -5,7 +5,7 @@
 #include "Item.h"
 
 
-enum {INT, STRING, FLOAT, CHAR, BOOLEAN, LONG, INTU, INTARR, INTARR_S64};
+enum {INT, STRING, STRING_S64, FLOAT, CHAR, BOOLEAN, LONG, INTU, INTAR, INTAR_S64};
 
 
 typedef struct tagIteger {
@@ -20,8 +20,9 @@ typedef struct tagFloat {
 
 typedef struct tagIntArray {
     ItemData data;
+    size_t length;
     int *arr;
-} IntArray;
+} IntAr;
 
 typedef struct tagIntArrayStatic
 {
@@ -41,7 +42,9 @@ typedef struct tagString64 {
 } String64;
 
 
-// ItemData data_str = {STRING, sizeof(String)};
+ItemData data_str = {STRING, sizeof(String)};
+ItemData data_int = {INT, sizeof(Integer)};
+ItemData data_intar = {INTAR, sizeof(IntAr)};
 
 
 #endif
