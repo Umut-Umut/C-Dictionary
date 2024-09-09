@@ -11,6 +11,14 @@ int main(int argc, char **argv)
 	Table *table = AllocTable();
 
 
+	Integer key = {data_int, 66};
+	Integer val1 = {data_int, 55};
+	Integer val2 = {data_int, 77};
+	
+
+	Insert(table, &key, &val1);
+	Insert(table, &key, &val2);
+
 
 	FreeTable(table);
 	

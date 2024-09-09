@@ -110,6 +110,21 @@ static void freeItem(Item* item)
 	free(item->value);
 	free(item);
 }
+static Table* allocTable(int size)
+{
+	Table* table = malloc(sizeof(Table));
+	if (NULL == table)
+	{
+		return NULL;
+	}
+
+	// next prime is 47 for 50
+	table->size = findNextPrime(size);
+	table->count = 0;
+	table->items = calloc(table->size, sizeof(Item*));
+
+	return table;
+}
 static void resize(Table* table, int newSize)
 {
 	if (newSize < 50)
@@ -147,41 +162,6 @@ static void resize(Table* table, int newSize)
 	// The strategy is we modify the table passed as argument
 	// And free the new table with swapped memory locations
 	FreeTable(newTable);
-}
-static void delete(Table *table, Item **itemLocation)
-{
-	Item *item = *itemLocation;
-	// If search returned an empty slot location, we do nothing, this item doesn't exist in table already
-	if (NULL == item)
-	{
-		return;
-	}
-
-	// item aldıktan sonra deleted olarak işaretliyor.
-	freeItem(item);
-	*itemLocation = DELETED;
-	table->count--;
-
-	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
-	if (10 > table->count * 100 / table->size)
-	{
-		resize(table, table->size / 2);
-	}
-}
-static Table* allocTable(int size)
-{
-	Table* table = malloc(sizeof(Table));
-	if (NULL == table)
-	{
-		return NULL;
-	}
-
-	// next prime is 47 for 50
-	table->size = findNextPrime(size);
-	table->count = 0;
-	table->items = calloc(table->size, sizeof(Item*));
-
-	return table;
 }
 static Item** search(Table* table, const void* key, bool findInsertLocation)
 {
@@ -223,8 +203,7 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		{
 			if (findInsertLocation)
 			{
-				// freeItem(item);
-				delete(table, itemLocation);
+				
 			}
 			return itemLocation;
 		}
@@ -269,6 +248,8 @@ void Insert(Table* table, const void* key, const void* value)
 
 	// Search an empty slot location to insert the new item
 	Item** itemLocation = search(table, key, true);
+	
+
 	(*itemLocation) = allocItem(key, value);
 
 	// Increase the count of items in the table
@@ -277,8 +258,23 @@ void Insert(Table* table, const void* key, const void* value)
 void Delete(Table* table, const void* key)
 {
 	Item** itemLocation = search(table, key, false);
+	Item *item = *itemLocation;
+	// If search returned an empty slot location, we do nothing, this item doesn't exist in table already
+	if (NULL == item)
+	{
+		return;
+	}
 
-	delete(table, itemLocation);
+	// item aldıktan sonra deleted olarak işaretliyor.
+	freeItem(item);
+	*itemLocation = DELETED;
+	table->count--;
+
+	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
+	if (10 > table->count * 100 / table->size)
+	{
+		resize(table, table->size / 2);
+	}
 }
 
 // void* Search(Table* table, const void* key)
