@@ -18,6 +18,7 @@ typedef struct tagFloat {
     float value;
 } Float;
 
+// FreeItem yeterli değil
 typedef struct tagIntArray {
     ItemData data;
     size_t length;
@@ -30,11 +31,11 @@ typedef struct tagIntArrayStatic
     int arr[64];
 } IntArray_S64;
 
+// FreeItem yeterli değil
 typedef struct tagString {
     ItemData data;
     char *text;
 } String;
-
 
 typedef struct tagString64 {
     ItemData data;

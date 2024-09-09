@@ -6,94 +6,10 @@
 #include "MyTypes.h"
 
 
-/*
-İçinde dinamik dizi saklanan yapıların özel olarak serbest bırakılması gerekiyor.
-*/
-
-
 int main(int argc, char **argv)
 {
 	Table *table = AllocTable();
 
-
-    // 5 adet dinamik tam sayı dizisi oluşturma
-    int* keys[5];
-	int* vals[5];
-    for (int i = 0; i < 5; i++) {
-        keys[i] = (int*)malloc(6 * sizeof(int));  // 6 elemanlı dizi
-        vals[i] = (int*)malloc(6 * sizeof(int));  // 6 elemanlı dizi
-        if (keys[i] == NULL || vals[i] == NULL) {
-            printf("Bellek tahsisi basarisiz!\n");
-            return 1;
-        }
-    }
-
-    // Dizilere önceden belirlenmiş sayıları ekleme
-    int keys_vals[5][6] = {
-        {47, 15, 28, 61, 5, 36},
-        {82, 93, 74, 90, 53, 67},
-        {12, 19, 3, 22, 84, 41},
-        {76, 8, 13, 55, 34, 99},
-        {45, 33, 21, 60, 17, 88}
-    };
-    int vals_vals[5][6] = {
-        {12, 34, 56, 78, 90, 11},
-        {23, 45, 67, 89, 12, 34},
-        {34, 56, 78, 90, 21, 43},
-        {45, 67, 89, 12, 32, 54},
-        {56, 78, 90, 11, 22, 33}
-    };
-
-    // Dizileri doldurma
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 6; j++) {
-            keys[i][j] = keys_vals[i][j];
-			vals[i][j] = vals_vals[i][j];
-        }
-    }
-
-
-	// Insert
-	for (int i = 0; i < 5; i++)
-	{
-		IntAr key = {data_intar, 6, keys[0]};
-		IntAr value = {data_intar, 6, vals[i]};
-
-
-		Insert(table, &key, &value);
-	}
-	printf("table count : %d\n", table->count);
-
-
-	// Print
-	for (int i = 0; i < 5; i++)
-	{
-		printf("\n\n%d.IntAr\n", i);
-		IntAr key = {data_intar, 6, keys[i]};
-
-		Item *item = Search(table, &key);
-		if (item)
-		{
-			IntAr *ar_key = (IntAr *)item->key;
-			IntAr *ar_val = (IntAr *)item->value;
-
-			for (int j = 0; j < ar_key->length; j++)
-			{
-				printf("key[%d] = %d", j, ar_key->arr[j]);
-				if (j < ar_val->length)
-				{
-					printf(" : val[%d] = %d\n", j, ar_val->arr[j]);
-				}
-			}
-		}
-	}
-
-
-	// Belleği serbest bırakma
-    for (int i = 0; i < 5; i++) {
-        free(keys[i]);
-		free(vals[i]);
-    }
 
 
 	FreeTable(table);

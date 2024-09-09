@@ -110,6 +110,44 @@ static void freeItem(Item* item)
 	free(item->value);
 	free(item);
 }
+static void resize(Table* table, int newSize)
+{
+	if (newSize < 50)
+	{
+		return;
+	}
+
+	// Allocate a new table, and copy item pointers
+	Table* newTable = allocTable(newSize);
+	for (int i = 0; i < table->size; i++)
+	{
+		Item* item = table->items[i];
+		
+		// If an item is deleted or null, skip it
+		if (NULL == item || DELETED == item)
+		{
+			continue;
+		}
+
+		Insert(newTable, item->key, item->value);
+	}
+
+	// Copy the final amount of count to new table
+	table->count = newTable->count;
+
+	// Swap tables so we can free memory on new table pointer
+	int tempSize = table->size; 
+	table->size = newTable->size;
+	newTable->size = tempSize;
+
+	Item** tempItems = table->items;
+	table->items = newTable->items;
+	newTable->items = tempItems;
+
+	// The strategy is we modify the table passed as argument
+	// And free the new table with swapped memory locations
+	FreeTable(newTable);
+}
 static void delete(Table *table, Item **itemLocation)
 {
 	Item *item = *itemLocation;
@@ -122,8 +160,13 @@ static void delete(Table *table, Item **itemLocation)
 	// item aldıktan sonra deleted olarak işaretliyor.
 	freeItem(item);
 	*itemLocation = DELETED;
+	table->count--;
 
-	table->count--;	
+	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
+	if (10 > table->count * 100 / table->size)
+	{
+		resize(table, table->size / 2);
+	}
 }
 static Table* allocTable(int size)
 {
@@ -199,44 +242,6 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		}
 	}
 }
-static void resize(Table* table, int newSize)
-{
-	if (newSize < 50)
-	{
-		return;
-	}
-
-	// Allocate a new table, and copy item pointers
-	Table* newTable = allocTable(newSize);
-	for (int i = 0; i < table->size; i++)
-	{
-		Item* item = table->items[i];
-		
-		// If an item is deleted or null, skip it
-		if (NULL == item || DELETED == item)
-		{
-			continue;
-		}
-
-		Insert(newTable, item->key, item->value);
-	}
-
-	// Copy the final amount of count to new table
-	table->count = newTable->count;
-
-	// Swap tables so we can free memory on new table pointer
-	int tempSize = table->size; 
-	table->size = newTable->size;
-	newTable->size = tempSize;
-
-	Item** tempItems = table->items;
-	table->items = newTable->items;
-	newTable->items = tempItems;
-
-	// The strategy is we modify the table passed as argument
-	// And free the new table with swapped memory locations
-	FreeTable(newTable);
-}
 
 // Public methods
 Table* AllocTable()
@@ -272,26 +277,8 @@ void Insert(Table* table, const void* key, const void* value)
 void Delete(Table* table, const void* key)
 {
 	Item** itemLocation = search(table, key, false);
-	// Item*  item = *itemLocation;
 
-	// // If search returned an empty slot location, we do nothing, this item doesn't exist in table already
-	// if (NULL == item)
-	// {
-	// 	return;
-	// }
-
-	// // item aldıktan sonra deleted olarak işaretliyor.
-	// freeItem(item);
-	// *itemLocation = DELETED;
-
-	// table->count--;
 	delete(table, itemLocation);
-
-	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
-	if (10 > table->count * 100 / table->size)
-	{
-		resize(table, table->size / 2);
-	}
 }
 
 // void* Search(Table* table, const void* key)
