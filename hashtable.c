@@ -89,8 +89,8 @@ static Item* allocItem(const void* key, const void* value)
 	// item->key = (void *)calloc(data_key->item_size, sizeof(void));
 	// item->value = (void *)calloc(data_value->item_size, sizeof(void));
 
-	item->key = (void *)malloc(data_key->item_size);
-	item->value = (void *)malloc(data_value->item_size);
+	item->key = malloc(data_key->item_size);
+	item->value = malloc(data_value->item_size);
 
 	item->type_key = data_key->type;
 	item->type_value = data_value->type;
@@ -248,12 +248,24 @@ void Insert(Table* table, const void* key, const void* value)
 
 	// Search an empty slot location to insert the new item
 	Item** itemLocation = search(table, key, true);
-	
 
-	(*itemLocation) = allocItem(key, value);
+	Item *item = *itemLocation;
+	if (NULL == item || DELETED == item)
+	{ // Add key
+		(*itemLocation) = allocItem(key, value);
+		// Increase the count of items in the table
+		table->count++;
+	}
+	else // Update value
+	{
+		free(item->value);
+		ItemData *data_value = (ItemData *)value;
+		
+		item->value = malloc(data_value->item_size);
+		item->type_value = data_value->type;
 
-	// Increase the count of items in the table
-	table->count++;
+		memcpy(item->value, value, data_value->item_size);
+	}
 }
 void Delete(Table* table, const void* key)
 {

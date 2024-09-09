@@ -11,13 +11,35 @@ int main(int argc, char **argv)
 	Table *table = AllocTable();
 
 
-	Integer key = {data_int, 66};
-	Integer val1 = {data_int, 55};
-	Integer val2 = {data_int, 77};
-	
+	int keys[10] = {47, 15, 28, 61, 5, 36, 12, 19, 3, 22};
+    int vals[10] = {82, 93, 74, 90, 53, 67, 84, 41, 76, 8};
 
-	Insert(table, &key, &val1);
-	Insert(table, &key, &val2);
+
+	// Insert
+	for (int i = 0; i < 10; i++)
+	{
+		Integer key = {data_int, keys[0]};
+		Integer val = {data_int, vals[i]};
+
+		Insert(table, &key, &val);
+	}
+	printf("table count : %d\n", table->count);
+
+	// Print
+	for (int i = 0; i < 10; i++)
+	{
+		Integer key = {data_int, keys[i]};
+
+		Item *item = Search(table, &key);
+		if (item)
+		{
+			Integer *key = (Integer *)item->key;
+			Integer *val = (Integer *)item->value;
+
+			printf("%d : %d\n", key->value, val->value);
+			
+		}
+	}
 
 
 	FreeTable(table);
