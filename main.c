@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 	// Insert
 	for (int i = 0; i < 10; i++)
 	{
-		Integer key = {data_int, keys[0]};
+		Integer key = {data_int, keys[i]};
 		Integer val = {data_int, vals[i]};
 
 		Insert(table, &key, &val);

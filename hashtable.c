@@ -201,10 +201,12 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		// if (0 == strncmp((char *)key, (char *)(item->key), data_key->item_size))
 		if (0 == memcmp(key, item->key, data_key->item_size))
 		{
-			if (findInsertLocation)
-			{
+			// if (findInsertLocation)
+			// {
 				
-			}
+			// }
+
+			// Value of this key will update.
 			return itemLocation;
 		}
 
