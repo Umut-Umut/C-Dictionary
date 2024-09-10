@@ -6,9 +6,6 @@
 #include "MyTypes.h"
 
 
-// git commit icin
-
-
 int main(int argc, char **argv)
 {
 	Table *table = AllocTable();
