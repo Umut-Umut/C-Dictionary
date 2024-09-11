@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 {
 	Table *table = AllocTable();
 
-	// Test Code
+	// TEST CODE
 	int keys[10] = {47, 15, 28, 61, 5, 36, 12, 19, 3, 22};
     int vals[10] = {82, 93, 74, 90, 53, 67, 84, 41, 76, 8};
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 			
 		}
 	}
-
+	// TEST CODE
 
 	FreeTable(table);
 	
