@@ -6,7 +6,6 @@
 #include "hashtable.h"
 
 // Allocate a memory location to use as a sentinel value for items marked as deleted (similar to NULL pointer)
-// Türkçesi, kendi adresini tutan bir işaretçiymiş. Yani doğal olarak yalnızca kendisine ait bi adres.
 static void* DELETED = &DELETED;
 
 static int findNextPrime(int x)
@@ -80,14 +79,7 @@ static Item* allocItem(const void* key, const void* value)
 		return NULL;
 	}
 
-	// strdup ile key ve value parametrelerini dinamik bir adrese kopyalıyor.
-	// item->key   = _strdup(key);
-	// item->value = _strdup(value);
-
 	ItemData *data_key = (ItemData *)key, *data_value = (ItemData *)value;
-
-	// item->key = (void *)calloc(data_key->item_size, sizeof(void));
-	// item->value = (void *)calloc(data_value->item_size, sizeof(void));
 
 	item->key = malloc(data_key->item_size);
 	item->value = malloc(data_value->item_size);
@@ -172,11 +164,7 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		int index = doubleHash(key, table->size, attempt);
 		attempt++;
 
-		// Table.items dizisindeki indexte bulunan Item * i tutuyor.
 		Item*  item = table->items[index];
-
-		// Table.items dizisindeki indexin kendisini tutuyor.
-		// Eğer &item kullanırsak o zaman bu döngüde oluşturulmuş olan değişkenin adresini elde ederiz.
 		Item** itemLocation = &table->items[index];
 
 
@@ -198,23 +186,11 @@ static Item** search(Table* table, const void* key, bool findInsertLocation)
 		}
 		
 		const ItemData *data_key = key;
-		// if (0 == strncmp((char *)key, (char *)(item->key), data_key->item_size))
 		if (0 == memcmp(key, item->key, data_key->item_size))
 		{
-			// if (findInsertLocation)
-			// {
-				
-			// }
-
 			// Value of this key will be updated
 			return itemLocation;
 		}
-
-		// if (0 == strcmp(key, item->key))
-		// {
-		// 	return itemLocation;
-		// }
-
 
 		// There is no point to compare keys if we want to find an empty slot
 		if (findInsertLocation)
@@ -242,7 +218,6 @@ void FreeTable(Table* table)
 }
 void Insert(Table* table, const void* key, const void* value)
 {
-	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
 	if (70 < table->count * 100 / table->size)
 	{
 		resize(table, table->size * 2);
@@ -279,19 +254,16 @@ void Delete(Table* table, const void* key)
 		return;
 	}
 
-	// item aldıktan sonra deleted olarak işaretliyor.
 	freeItem(item);
 	*itemLocation = DELETED;
 	table->count--;
 
-	// Basit stack yapısı, yüzde cinsinden kullanımına bakıyormuş.
 	if (10 > table->count * 100 / table->size)
 	{
 		resize(table, table->size / 2);
 	}
 }
 
-// void* Search(Table* table, const void* key)
 Item *Search(Table* table, const void* key)
 {
 	// Search for the item with the given key
@@ -301,9 +273,6 @@ Item *Search(Table* table, const void* key)
 	{
 		return NULL;
 	}
-
-	// Return the value of the item found
-	// return item->value;
 
 	// Return the item found
 	return item;

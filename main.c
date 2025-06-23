@@ -53,19 +53,19 @@ int main(int argc, char **argv)
 // TESTS
 
 /* INTAR TEST
-    // 5 adet dinamik tam sayı dizisi oluşturma
+    // Create 5 dynamic integer arrays
     int* keys[5];
 	int* vals[5];
     for (int i = 0; i < 5; i++) {
-        keys[i] = (int*)malloc(6 * sizeof(int));  // 6 elemanlı dizi
-        vals[i] = (int*)malloc(6 * sizeof(int));  // 6 elemanlı dizi
+        keys[i] = (int*)malloc(6 * sizeof(int));  // array with 6 elements
+        vals[i] = (int*)malloc(6 * sizeof(int));  // array with 6 elements
         if (keys[i] == NULL || vals[i] == NULL) {
-            printf("Bellek tahsisi basarisiz!\n");
+            printf("Memory allocation failed!\n");
             return 1;
         }
     }
 
-    // Dizilere önceden belirlenmiş sayıları ekleme
+    // Populate arrays with predefined values
     int keys_vals[5][6] = {
         {47, 15, 28, 61, 5, 36},
         {82, 93, 74, 90, 53, 67},
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         {56, 78, 90, 11, 22, 33}
     };
 
-    // Dizileri doldurma
+    // Fill arrays
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 6; j++) {
             keys[i][j] = keys_vals[i][j];
@@ -89,20 +89,17 @@ int main(int argc, char **argv)
         }
     }
 
-
-	// Insert
+	// Insert into table
 	for (int i = 0; i < 5; i++)
 	{
 		IntAr key = {data_intar, 6, keys[0]};
 		IntAr value = {data_intar, 6, vals[i]};
 
-
 		Insert(table, &key, &value);
 	}
 	printf("table count : %d\n", table->count);
 
-
-	// Print
+	// Print values
 	for (int i = 0; i < 5; i++)
 	{
 		printf("\n\n%d.IntAr\n", i);
@@ -125,8 +122,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-
-	// Belleği serbest bırakma
+	// Free memory
     for (int i = 0; i < 5; i++) {
         free(keys[i]);
 		free(vals[i]);
@@ -137,8 +133,7 @@ int main(int argc, char **argv)
 	int keys[10] = {47, 15, 28, 61, 5, 36, 12, 19, 3, 22};
     int vals[10] = {82, 93, 74, 90, 53, 67, 84, 41, 76, 8};
 
-
-	// Insert
+	// Insert into table
 	for (int i = 0; i < 10; i++)
 	{
 		Integer key = {data_int, keys[0]};
@@ -148,7 +143,7 @@ int main(int argc, char **argv)
 	}
 	printf("table count : %d\n", table->count);
 
-	// Print
+	// Print values
 	for (int i = 0; i < 10; i++)
 	{
 		Integer key = {data_int, keys[i]};
@@ -160,7 +155,6 @@ int main(int argc, char **argv)
 			Integer *val = (Integer *)item->value;
 
 			printf("%d : %d\n", key->value, val->value);
-			
 		}
 	}
 */
@@ -175,8 +169,7 @@ int main(int argc, char **argv)
 
 	ItemData item_str = {STRING, sizeof(String)};
 	
-
-	// Insert
+	// Insert into table
 	for (int i = 0; i < 10; i++)
 	{
 		String str_key = {item_str, keys[i]}; 
@@ -186,7 +179,7 @@ int main(int argc, char **argv)
 	}
 	printf("table count : %d\n", table->count);
 
-	// Print
+	// Print values
 	for (int i = 0; i < 10; i++)
 	{
 		String str_key = {item_str, keys[i]};
@@ -194,7 +187,7 @@ int main(int argc, char **argv)
 		Item *item = Search(table, &str_key);
 		if (NULL == item)
 		{
-
+			// No action
 		}
 		else
 		{

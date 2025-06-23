@@ -18,7 +18,7 @@ typedef struct tagFloat {
     float value;
 } Float;
 
-// FreeItem yeterli değil
+// FreeItem is not sufficient for this structure — requires a custom free function for 'arr'
 typedef struct tagIntArray {
     ItemData data;
     size_t length;
@@ -31,7 +31,7 @@ typedef struct tagIntArrayStatic
     int arr[64];
 } IntArray_S64;
 
-// FreeItem yeterli değil
+// FreeItem is not sufficient for this structure — requires a custom free function for 'text'
 typedef struct tagString {
     ItemData data;
     char *text;
